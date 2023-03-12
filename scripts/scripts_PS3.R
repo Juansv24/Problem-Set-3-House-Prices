@@ -260,42 +260,42 @@ table(is.na(raw_test$bathrooms)) # 866 NA
 ####### Para train
 p4 = "\\s?+(balcon|balcones|terraza|terrazas|patio)+\\s?"
 
-train$balcony <- NA
+raw_train$balcony <- NA
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(balcony = ifelse(is.na(balcony)== T,
-                          str_extract(string = train$description,
+                          str_extract(string = raw_train$description,
                                       pattern = p4),
                           balcony)
   )
 
-table(is.na(train$balcony)) #19225 NA
+table(is.na(raw_train$balcony)) #19225 NA
 
-table(is.na(train$balcony))
-train$balcony[is.na(train$balcony)] <- 0 # 0 no tiene balcón/terraza/patio
+table(is.na(raw_train$balcony))
+raw_train$balcony[is.na(raw_train$balcony)] <- 0 # 0 no tiene balcón/terraza/patio
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(balcony = ifelse(balcony!=0,
                           1,             # 1 tiene balcón/terraza/patio
                           balcony)
   )
 
 ####### Para test
-test$balcony <- NA
+raw_test$balcony <- NA
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(balcony = ifelse(is.na(balcony)== T,
-                          str_extract(string = test$description,
+                          str_extract(string = raw_test$description,
                                       pattern = p4),
                           balcony)
   )
 
-table(is.na(test$balcony)) #5427 NA
+table(is.na(raw_test$balcony)) #5427 NA
 
-table(is.na(test$balcony))
-test$balcony[is.na(test$balcony)] <- 0 # 0 no tiene balcón/terraza/patio
+table(is.na(raw_test$balcony))
+raw_test$balcony[is.na(raw_test$balcony)] <- 0 # 0 no tiene balcón/terraza/patio
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(balcony = ifelse(balcony!=0,
                           1,             # 1 tiene balcón/terraza/patio
                           balcony)
@@ -307,42 +307,42 @@ test <- test %>%
 ####### Para train
 p5 = "\\s?+(garaje|garajes|parqueadero|parqueaderos)+\\s?"
 
-train$garage <- NA
+raw_train$garage <- NA
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(garage = ifelse(is.na(garage)== T,
-                         str_extract(string = train$description,
+                         str_extract(string = raw_train$description,
                                      pattern = p5),
                          garage)
   )
 
-table(is.na(train$garage)) #11906 NA
+table(is.na(raw_train$garage)) #11906 NA
 
-table(is.na(train$garage))
-train$garage[is.na(train$garage)] <- 0 # 0 no tiene garaje
+table(is.na(raw_train$garage))
+raw_train$garage[is.na(raw_train$garage)] <- 0 # 0 no tiene garaje
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(garage = ifelse(garage!=0,
                          1,             # 1 tiene garaje
                          garage)
   )
 
 ####### Para test
-test$garage <- NA
+raw_test$garage <- NA
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(garage = ifelse(is.na(garage)== T,
-                         str_extract(string = test$description,
+                         str_extract(string = raw_test$description,
                                      pattern = p5),
                          garage)
   )
 
-table(is.na(test$garage)) #3169 NA
+table(is.na(raw_test$garage)) #3169 NA
 
-table(is.na(test$garage))
-test$garage[is.na(test$garage)] <- 0 # 0 no tiene garaje
+table(is.na(raw_test$garage))
+raw_test$garage[is.na(raw_test$garage)] <- 0 # 0 no tiene garaje
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(garage = ifelse(garage!=0,
                          1,             # 1 tiene garaje
                          garage)
@@ -352,86 +352,82 @@ test <- test %>%
 ### Se ajusta el formato de las variables imputadas
 
 ### Variable surface_total en train
-train <- train %>% 
-  mutate(surface_total = gsub('m', '', train$surface_total))
+raw_train <- raw_train %>% 
+  mutate(surface_total = gsub('m', '', raw_train$surface_total))
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(surface_total = ifelse(surface_total == 'character(0)',
                                 NA,
                                 surface_total)
   )
 
-train$surface_total <- as.numeric(train$surface_total)
+raw_train$surface_total <- as.numeric(raw_train$surface_total)
 
 ### Variable surface_total en test
-test <- test %>% 
-  mutate(surface_total = gsub('m', '', test$surface_total))
+raw_test <- raw_test %>% 
+  mutate(surface_total = gsub('m', '', raw_test$surface_total))
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(surface_total = ifelse(surface_total == 'character(0)',
                                 NA,
                                 surface_total)
   )
 
-test$surface_total <- as.numeric(test$surface_total)
+raw_test$surface_total <- as.numeric(raw_test$surface_total)
 
 
 ### Variable bathrooms en train
-train <- train %>% 
-  mutate(bathrooms = gsub('banos|bano', '', train$bathrooms))
+raw_train <- raw_train %>% 
+  mutate(bathrooms = gsub('banos|bano', '', raw_train$bathrooms))
 
-train <- train %>% 
-  mutate(bathrooms = gsub('con|un', '1', train$bathrooms))
+raw_train <- raw_train %>% 
+  mutate(bathrooms = gsub('con|un', '1', raw_train$bathrooms))
 
-train <- train %>% 
-  mutate(bathrooms = gsub('dos', '2', train$bathrooms))
+raw_train <- raw_train %>% 
+  mutate(bathrooms = gsub('dos', '2', raw_train$bathrooms))
 
-train <- train %>% 
-  mutate(bathrooms = gsub('tres', '3', train$bathrooms))
+raw_train <- raw_train %>% 
+  mutate(bathrooms = gsub('tres', '3', raw_train$bathrooms))
 
-train$bathrooms <- as.numeric(train$bathrooms)
+raw_train$bathrooms <- as.numeric(raw_train$bathrooms)
 
 ### Variable bathrooms en test
-test <- test %>% 
-  mutate(bathrooms = gsub('banos|bano', '', test$bathrooms))
+raw_test <- raw_test %>% 
+  mutate(bathrooms = gsub('banos|bano', '', raw_test$bathrooms))
 
-test <- test %>% 
-  mutate(bathrooms = gsub('con|un', '1', test$bathrooms))
+raw_test <- raw_test %>% 
+  mutate(bathrooms = gsub('con|un', '1', raw_test$bathrooms))
 
-test <- test %>% 
-  mutate(bathrooms = gsub('dos', '2', test$bathrooms))
+raw_test <- raw_test %>% 
+  mutate(bathrooms = gsub('dos', '2', raw_test$bathrooms))
 
-test <- test %>% 
-  mutate(bathrooms = gsub('tres', '3', test$bathrooms))
+raw_test <- raw_test %>% 
+  mutate(bathrooms = gsub('tres', '3', raw_test$bathrooms))
 
-test$bathrooms <- as.numeric(test$bathrooms)
+raw_test$bathrooms <- as.numeric(raw_test$bathrooms)
 
 ### Dicotomizar la variable tipo de propiedad en train y test
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(property_type = ifelse(property_type == 'Casa',
                           1,
                           0)
   )
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(property_type = ifelse(property_type == 'Casa',
                                 1,
                                 0)
   )
 
 
-
-
-
-
-#---------------------------------------- Estudio de patrones espaciales e inclusión de cuatro predictores de fuentes externas
+#---- Estudio de patrones espaciales e inclusión de cuatro predictores de fuentes externas
 
 
 ####### Estudio del patrón espacial del precio del inmueble 
 
 #### Se eliminan las observaciones que no tienen información de latitud o longitud
-filtro1 <- is.na(train$lat) | is.na(train$lon)
-train <- train[!filtro1, ]
+filtro1 <- is.na(raw_train$lat) | is.na(raw_train$lon)
+raw_train <- raw_train[!filtro1, ]
 
 #### Revisión que las observaciones estén bien georeferenciadas y que estén dentro de Bogotá
 limites <- getbb("Bogota Colombia")
@@ -439,13 +435,76 @@ limites <- getbb("Bogota Colombia")
 #### Primera visualización
 leaflet() %>%
   addTiles() %>%
-  addCircles(lng = train$lon, 
-             lat = train$lat)
+  addCircles(lng = raw_train$lon, 
+             lat = raw_train$lat)
 
 #### Se restringe la muestra a observaciones dentro de Bogotá
-filtro1 <- between(train$lon, limites[1, "min"], limites[1, "max"])
-filtro2 <- between(train$lat, limites[2, "min"], limites[2, "max"])
+filtro1 <- between(raw_train$lon, limites[1, "min"], limites[1, "max"])
+filtro2 <- between(raw_train$lat, limites[2, "min"], limites[2, "max"])
 filtro3 <- filtro1 & filtro2
-train <- train[filtro3,] 
+raw_train <- raw_train[filtro3,] 
 
 
+
+available_tags("leisure")
+
+parques <- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "leisure" , value = "park") 
+
+parque_infantil <- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "leisure" , value = "playground")
+
+available_tags("amenity") 
+
+hospital <- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "amenity" , value = "hospital")
+
+clinica<- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "amenity" , value = "clinic")
+
+estacion_bus<- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "amenity" , value = "bus_station")
+
+policia<- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "amenity" , value = "police")
+
+colegio<- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "amenity" , value = "school")
+
+mercado<- opq(bbox = getbb("Bogota Colombia")) %>%
+  add_osm_feature(key = "amenity" , value = "marketplace")
+
+
+#---Gráficar mapas variables externas
+
+#---Parques---#
+parques_sf <- osmdata_sf(parques)
+
+#--- Extraer geometria
+parques_geometria <- parques_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+parques_geometria
+
+#---Plotear parques 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = parques_geometria, col="green",
+              opacity = 0.8, popup = parques_geometria$name)
+
+#---Parque Infantil---#
+parque_infanti_sf <- osmdata_sf(parque_infanti)
+
+#--- Extraer geometria
+parque_infanti_geometria <- parque_infanti_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+parque_infanti_geometria
+
+#---Plotear parque_infanti 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = parque_infanti_geometria, col="green",
+              opacity = 0.8, popup = parque_infanti_geometria$name)
