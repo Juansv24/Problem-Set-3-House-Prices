@@ -541,3 +541,66 @@ leaflet() %>%
   addPolygons(data = clinica_geometria, col="#1F497D",
               opacity = 0.8, popup = clinica_geometria$name)
 
+#---estacion_bus---#
+estacion_bus_sf <- osmdata_sf(estacion_bus)
+
+#--- Extraer geometria
+estacion_bus_geometria <- estacion_bus_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+estacion_bus_geometria
+
+#---Plotear estacion_bus 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = estacion_bus_geometria, col="#555555",
+              opacity = 0.8, popup = estacion_bus_geometria$name)
+
+#---policia---#
+policia_sf <- osmdata_sf(policia)
+
+#--- Extraer geometria
+policia_geometria <- policia_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+policia_geometria
+
+#---Plotear policia 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = policia_geometria, col="#556B2F",
+              opacity = 0.8, popup = policia_geometria$name)
+
+#---colegio---#
+colegio_sf <- osmdata_sf(colegio)
+
+#--- Extraer geometria
+colegio_geometria <- colegio_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+colegio_geometria
+
+#---Plotear colegio 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = colegio_geometria, col="#FFBF00",
+              opacity = 0.8, popup = colegio_geometria$name)
+
+#---mercado---#
+mercado_sf <- osmdata_sf(mercado)
+
+#--- Extraer geometria
+mercado_geometria <- mercado_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+mercado_geometria
+
+#---Plotear mercado 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = mercado_geometria, col="#FFA500",
+              opacity = 0.8, popup = mercado_geometria$name)
