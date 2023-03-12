@@ -494,17 +494,50 @@ leaflet() %>%
               opacity = 0.8, popup = parques_geometria$name)
 
 #---Parque Infantil---#
-parque_infanti_sf <- osmdata_sf(parque_infanti)
+parque_infantil_sf <- osmdata_sf(parque_infantil)
 
 #--- Extraer geometria
-parque_infanti_geometria <- parque_infanti_sf$osm_polygons %>% 
+parque_infantil_geometria <- parque_infantil_sf$osm_polygons %>% 
   select(osm_id, name)
 
-parque_infanti_geometria
+parque_infantil_geometria
 
-#---Plotear parque_infanti 
+#---Plotear Parque Infantil 
 
 leaflet() %>%
   addTiles() %>%
-  addPolygons(data = parque_infanti_geometria, col="green",
-              opacity = 0.8, popup = parque_infanti_geometria$name)
+  addPolygons(data = parque_infantil_geometria, col="pink",
+              opacity = 0.8, popup = parque_infantil_geometria$name)
+
+#---Hospital---#
+hospital_sf <- osmdata_sf(hospital)
+
+#--- Extraer geometria
+hospital_geometria <- hospital_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+hospital_geometria
+
+#---Plotear Hospital 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = hospital_geometria, col="#ADD8E6",
+              opacity = 0.8, popup = hospital_geometria$name)
+
+#---Clinica---#
+clinica_sf <- osmdata_sf(clinica)
+
+#--- Extraer geometria
+clinica_geometria <- clinica_sf$osm_polygons %>% 
+  select(osm_id, name)
+
+clinica_geometria
+
+#---Plotear Clinica 
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data = clinica_geometria, col="#1F497D",
+              opacity = 0.8, popup = clinica_geometria$name)
+
