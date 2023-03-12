@@ -53,9 +53,9 @@ glimpse(raw_train)
 
 # Tabla de frecuencia de variables con missing value
 
-tab_missings <- apply(raw_train, 2, function(x) sum(is.na(x)))
-tab_missings <- table(tab_missings)
-tab_missings
+tab_train_missings <- apply(raw_train, 2, function(x) sum(is.na(x)))
+tab_train_missings <- table(tab_train_missings)
+tab_train_missings
 
 # Hay 10 variables no tienen missing value
 #--- property_id - city - price - moth - year - bedrooms property_type -operation_type
@@ -77,22 +77,35 @@ tab_missings
 #--- surface_total -surface_covered
 
 
+#--- Inspección de la base de datos train
+
+### Expolorar missing value
+skim(raw_train)
+
+glimpse(raw_train)
+
+# Tabla de frecuencia de variables con missing value
+
+tab_test_missings <- apply(raw_test, 2, function(x) sum(is.na(x)))
+tab_test_missings <- table(tab_test_missings)
+tab_test_missings
+
 
 
 
 
 
 ### "Missing values" en la variable price 
-filtro <- is.na(train$price)
+filtro <- is.na(raw_train$price)
 sum(filtro) ## la variable price no tiene "missing values"
 
 ### Distribución del precio del inmueble 
-summary(train$price) %>%
+summary(raw_train$price) %>%
   as.matrix() %>%
   as.data.frame() %>%
   mutate(V1 = scales::dollar(V1))
 
-p1 <- ggplot(train, aes(x = price)) +
+p1 <- ggplot(raw_train, aes(x = price)) +
   geom_histogram(fill = "darkblue", alpha = 0.4) +
   labs(x = "Precio (log-scale)", y = "Cantidad") +
   scale_x_log10(labels = scales::dollar) +
