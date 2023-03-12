@@ -22,7 +22,8 @@ rm(list = ls())
 #--- Cargar los paquetes necesarios
 library(pacman)
 p_load(tidyverse, ggplot2, openxlsx, scales, skimr, stringi, SnowballC, stringr,
-       rio, plotly, leaflet, rgeos, tmaptools, sf, stargazer, osmdata)
+       rio, plotly, leaflet, rgeos, tmaptools, sf, stargazer, osmdata,
+       ggExtra, gridExtra, tidyr, psych, readr)
 
 ### Cargar funciones
 
@@ -30,29 +31,56 @@ proper = function(x) paste0(toupper(substr(x, 1, 1)),
                             tolower(substring(x, 2)))
 
 
-### Cargar las bases
-
 #setwd("/Users/Dhiguera/Desktop/MECA UNIANDES/2301/PROBLEM SET/PS3/db")
 
-setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/Data/raw/")
+#--- Establecer el directorio de la carpeta de datos
 
-raw_test <- read.csv2("test.csv", 
-                               sep = ",", 
-                               dec = ".", 
-                               fileEncoding = "UTF-8")
+setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/raw")
 
-raw_train <- read.csv2("train.csv", 
-                               sep = ",", 
-                               dec = ".", 
-                               fileEncoding = "UTF-8")
+#--- Importar base de datos : train y test
+raw_train <- read_csv("train.csv")
+raw_test <- read_csv("test.csv")
 
 
+# Ajuste de las bases e inclusión de dos predictores imputados de la descripción de cada inmueble
 
-#---------------------------------------- Ajuste de las bases e inclusión de dos predictores imputados de la descripción de cada inmueble
+#--- Inspección de la base de datos train
 
-### Inspección de las bases
-glimpse(train)
-glimpse(test)
+### Expolorar missing value
+skim(raw_train)
+
+glimpse(raw_train)
+
+# Tabla de frecuencia de variables con missing value
+
+tab_missings <- apply(raw_train, 2, function(x) sum(is.na(x)))
+tab_missings <- table(tab_missings)
+tab_missings
+
+# Hay 10 variables no tienen missing value
+#--- property_id - city - price - moth - year - bedrooms property_type -operation_type
+#--- lat -lon
+
+# Una variable  tiene 12 missing value
+#--- description
+
+# Una variable  tiene 25 missing value
+#--- title
+
+# Una variable  tiene 10071 missing value
+#--- bathrooms
+
+# Una variable  tiene 18260 missing value
+#--- rooms
+
+# Dos variables  tienen 30790 missing value
+#--- surface_total -surface_covered
+
+
+
+
+
+
 
 ### "Missing values" en la variable price 
 filtro <- is.na(train$price)
