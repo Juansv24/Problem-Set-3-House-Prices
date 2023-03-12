@@ -1,13 +1,19 @@
-# Problem Set 3: predecir el precio de venta de inmuebles en la localidad de Chapinero en Bogotá D.C.
-# 2023/03/06
 
+#-------------------------------------------------------------------------------
+# Titulo: "Predecir el precio de venta de inmuebles en la localidad de Chapinero en Bogotá D.C"
+# Subtitulo: Problem Set 3
+# Curso: "Big Data y Machine Learning"
+#-------------------------------------------------------------------------------
 # Autores:
 # Andres Carrillo
 # Diana Higuera
-# Juan Sebastian Vallejo
+# Sebastian Vallejo
 # Lizbeth Hernandez
 
-
+# Creado: 2023/03/06
+# Última modificación: 2023/03/12
+# # Descripción:
+#-------------------------------------------------------------------------------
 
 ### Parte 1: preparación de las bases de datos y estadísticas descriptivas
 
