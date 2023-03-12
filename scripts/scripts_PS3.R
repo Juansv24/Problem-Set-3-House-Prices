@@ -140,117 +140,120 @@ ggplotly(p1)
  
 
 ### "Missing values" en la variable surface_total en train y test
-colSums(is.na(train)) # surface_total tiene 30790 NA
-colSums(is.na(test))  # surface_total tiene 8422 NA
+colSums(is.na(raw_train)) # surface_total tiene 30790 NA
+colSums(is.na(raw_test))  # surface_total tiene 8422 NA
 
 #### Se imputan valores de surface_covered a surface_total en train y tests
-train <- train %>% mutate(
+raw_train <- raw_train %>% mutate(
   surface_total = 
     ifelse(is.na(surface_total),surface_covered, surface_total))
-table(is.na(train$surface_total)) # ahora 26551 NA en train
+table(is.na(raw_train$surface_total)) # ahora 26551 NA en train
 
-test <- test %>% mutate(
+raw_test <- raw_test %>% mutate(
   surface_total = 
     ifelse(is.na(surface_total),surface_covered, surface_total))
-table(is.na(test$surface_total)) # ahora 6848 NA en test
+table(is.na(raw_test$surface_total)) # ahora 6848 NA en test
 
-#### Para los apartamentos que en surface_total no tienen información y que en la descripción o el título tienen el área, ésta se imputará usando RegEX
+# Para los apartamentos que en surface_total no tienen información y que en
+#la descripción o el título tienen el área, ésta se imputará usando RegEX
 
 ####### Para train
 
 #### Todo el texto en minúsculas
-train <- train %>% 
-  mutate(description = str_to_lower(string = train$description))
-train <- train %>% 
-  mutate(title = str_to_lower(string = train$title))
+raw_train <- raw_train %>% 
+  mutate(description = str_to_lower(string = raw_train$description))
+raw_train <- raw_train %>% 
+  mutate(title = str_to_lower(string = raw_train$title))
+
 ### Se eliminan los espacios extra
-train$description <- gsub("\\s+", " ", str_trim(train$description))
+raw_train$description <- gsub("\\s+", " ", str_trim(raw_train$description))
 
 ### Se define el o los patrones para imputar el área del apartamento
 
-p1 ="\\d{2,3}\\s?[m]"  # dado que los números de la descripción y el título son enteros, no se adiciona un patrón que busque decimales
+p1 ="\\d{2,3}\\s?[m]"  # dado que los números de la descripción y el título 
+#son enteros, no se adiciona un patrón que busque decimales
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(surface_total = ifelse(is.na(surface_total)== T,
-                                str_extract(string = train$description,
+                                str_extract(string = raw_train$description,
                                             pattern = p1),
                                 surface_total)
   )
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(surface_total = ifelse(is.na(surface_total)== T,
-                                str_extract(string = train$title,
+                                str_extract(string = raw_train$title,
                                             pattern = p1),
                                 surface_total)
   )
 
-table(is.na(train$surface_total)) #14527 NA
+table(is.na(raw_train$surface_total)) #14527 NA
 
 
 ####### Para test
 
-test <- test %>% 
-  mutate(title = str_to_lower(string = test$title))
+raw_test <- raw_test %>% 
+  mutate(title = str_to_lower(string = raw_test$title))
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(surface_total = ifelse(is.na(surface_total)== T,
-                                str_extract(string = test$description,
+                                str_extract(string = raw_test$description,
                                             pattern = p1),
                                 surface_total)
   )
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(surface_total = ifelse(is.na(surface_total)== T,
-                                str_extract(string = test$title,
+                                str_extract(string = raw_test$title,
                                             pattern = p1),
                                 surface_total)
   )
 
-table(is.na(test$surface_total)) # ahora surface_total tiene 3627 NA en test
+table(is.na(raw_test$surface_total)) # ahora surface_total tiene 3627 NA en test
 
 
 ### Imputación de la variable baños en train y test
 
 ####### Para train
-table(is.na(train$bathrooms))  # 10071 NA
+table(is.na(raw_train$bathrooms))  # 10071 NA
 
 p2 = "\\d\\s?+(banos|bano)" 
 p3 = "\\s?+(con bano|un bano|dos banos|tres banos)"
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(bathrooms = ifelse(is.na(bathrooms)== T,
-                            str_extract(string = train$description,
+                            str_extract(string = raw_train$description,
                                         pattern = p2),
                             bathrooms)
   )
 
-train <- train %>% 
+raw_train <- raw_train %>% 
   mutate(bathrooms = ifelse(is.na(bathrooms)== T,
-                            str_extract(string = train$description,
+                            str_extract(string = raw_train$description,
                                         pattern = p3),
                             bathrooms)
   )
 
-table(is.na(train$bathrooms)) # 4282 NA
+table(is.na(raw_train$bathrooms)) # 4282 NA
 
 ####### Para tests
-table(is.na(test$bathrooms))  # 2491 NA
+table(is.na(raw_test$bathrooms))  # 2491 NA
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(bathrooms = ifelse(is.na(bathrooms)== T,
-                            str_extract(string = test$description,
+                            str_extract(string = raw_test$description,
                                         pattern = p2),
                             bathrooms)
   )
 
-test <- test %>% 
+raw_test <- raw_test %>% 
   mutate(bathrooms = ifelse(is.na(bathrooms)== T,
-                            str_extract(string = test$description,
+                            str_extract(string = raw_test$description,
                                         pattern = p3),
                             bathrooms)
   )
 
-table(is.na(test$bathrooms)) # 866 NA
+table(is.na(raw_test$bathrooms)) # 866 NA
 
 ### Creación de la variable categórica tiene balcón/terraza, imputándola de la descripción, en train y test
 
