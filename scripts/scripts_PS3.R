@@ -1,4 +1,3 @@
-
 #-------------------------------------------------------------------------------
 # Titulo: "Predecir el precio de venta de inmuebles en la localidad de Chapinero en Bogotá D.C"
 # Subtitulo: Problem Set 3
@@ -15,32 +14,34 @@
 # # Descripción:
 #-------------------------------------------------------------------------------
 
-### Parte 1: preparación de las bases de datos y estadísticas descriptivas
+### Parte 1: Preparación de las bases de datos y estadísticas descriptivas
 
-### Limpieza del entorno
+#--- Limpieza del entorno
 rm(list = ls())
 
-### Cargar los paquetes necesarios
+#--- Cargar los paquetes necesarios
 library(pacman)
-p_load(tidyverse, 
-       rio, 
-       plotly, 
-       leaflet,
-       rgeos, 
-       tmaptools, 
-       sf, 
-       stargazer, 
-       osmdata)
+p_load(tidyverse, ggplot2, openxlsx, scales, skimr, stringi, SnowballC, stringr,
+       rio, plotly, leaflet, rgeos, tmaptools, sf, stargazer, osmdata)
+
+### Cargar funciones
+
+proper = function(x) paste0(toupper(substr(x, 1, 1)), 
+                            tolower(substring(x, 2)))
+
 
 ### Cargar las bases
-setwd("/Users/Dhiguera/Desktop/MECA UNIANDES/2301/PROBLEM SET/PS3/db")
 
-test <- read.csv2("test.csv", 
+#setwd("/Users/Dhiguera/Desktop/MECA UNIANDES/2301/PROBLEM SET/PS3/db")
+
+setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/Data/raw/")
+
+raw_test <- read.csv2("test.csv", 
                                sep = ",", 
                                dec = ".", 
                                fileEncoding = "UTF-8")
 
-train <- read.csv2("train.csv", 
+raw_train <- read.csv2("train.csv", 
                                sep = ",", 
                                dec = ".", 
                                fileEncoding = "UTF-8")
