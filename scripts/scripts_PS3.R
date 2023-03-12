@@ -57,32 +57,33 @@ tab_train_missings <- apply(raw_train, 2, function(x) sum(is.na(x)))
 tab_train_missings <- table(tab_train_missings)
 tab_train_missings
 
-# Hay 10 variables no tienen missing value
-#--- property_id - city - price - moth - year - bedrooms property_type -operation_type
-#--- lat -lon
-
-# Una variable  tiene 12 missing value
-#--- description
-
-# Una variable  tiene 25 missing value
-#--- title
-
-# Una variable  tiene 10071 missing value
-#--- bathrooms
-
-# Una variable  tiene 18260 missing value
-#--- rooms
-
-# Dos variables  tienen 30790 missing value
-#--- surface_total -surface_covered
+#---Descripción base de datos: train
+      # Hay 10 variables no tienen missing value
+      #--- property_id - city - price - moth - year - bedrooms property_type -operation_type
+      #--- lat -lon
+      
+      # Una variable  tiene 12 missing value
+      #--- description
+      
+      # Una variable  tiene 25 missing value
+      #--- title
+      
+      # Una variable  tiene 10071 missing value
+      #--- bathrooms
+      
+      # Una variable  tiene 18260 missing value
+      #--- rooms
+      
+      # Dos variables  tienen 30790 missing value
+      #--- surface_total -surface_covered
 
 
 #--- Inspección de la base de datos train
 
 ### Expolorar missing value
-skim(raw_train)
+skim(raw_test)
 
-glimpse(raw_train)
+glimpse(raw_test)
 
 # Tabla de frecuencia de variables con missing value
 
@@ -90,8 +91,33 @@ tab_test_missings <- apply(raw_test, 2, function(x) sum(is.na(x)))
 tab_test_missings <- table(tab_test_missings)
 tab_test_missings
 
+#---Descripción base de datos: test
+# Hay 9 variables no tienen missing value
+#--- property_id - city - moth - year - bedrooms property_type -operation_type
+#--- lat -lon
 
+# Una variable  tiene 3 missing value
+#--- description
 
+# Una variable  tiene 26 missing value
+#--- title
+
+# Una variable  tiene 2491 missing value
+#--- bathrooms
+
+# Una variable  tiene 4582 missing value
+#--- rooms
+
+# Una variable  tiene 7459 missing value
+#--- surface_covered
+
+# Una variable  tiene 8422 missing value
+#--- surface_total 
+
+# Una variable  tiene 10286 missing value
+#--- price
+
+#-----------------------------------------------------------------------------
 
 
 
