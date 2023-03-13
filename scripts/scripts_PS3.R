@@ -738,6 +738,9 @@ centroides_policia_sf <- st_as_sf(centroides_policia, coords = c("x", "y"))
 centroides_colegio_sf <- st_as_sf(centroides_colegio, coords = c("x", "y"))
 centroides_mercado_sf <- st_as_sf(centroides_mercado, coords = c("x", "y"))
 
+
+
+#Restringir
 chapinero<-getbb(place_name = "UPZ Chapinero, Bogota",
                  featuretype = "boundary:administrative",
                  format_out = "sf_polygon")  %>% .$multipolygon
@@ -746,12 +749,28 @@ leaflet() %>%
   addTiles() %>%
   addPolygons(data=chapinero)
 
-finca_raiz_chapinero <- st_intersection(x=train_sf , y=chapinero)
+
+#--- Distancias Chapinero train
+db_chapinero_train <- st_intersection(x=train_sf , y=chapinero)
 
 leaflet() %>%
   addTiles() %>%
   addPolygons(data=chapinero) %>%
-  addCircles(data=finca_raiz_chapinero)
+  addCircles(data=db_chapinero_train, col = "red")
+
+dist_matrix_parques_train <- st_distance(x=db_chapinero_train, y=centroides_parques_sf)
+dist_min_parques_train <- apply(dist_matrix_parques_train, 1 ,min)
+db_chapinero_train$distancia_parque <- dist_min_parques_train
+
+posicion <- apply(dist_matrix_parques_train, 1, function(x) which(min(x)==x))
+area <- st_area(parques_geometria)
+db_chapinero_train$area__parque <- area[posicion]
+
+
+
+view(db_chapinero_train)
+
+
 
 
 
