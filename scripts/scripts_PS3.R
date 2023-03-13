@@ -41,7 +41,8 @@ setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/da
 raw_train <- read_csv("train.csv")
 raw_test <- read_csv("test.csv")
 
-
+dim(raw_train) # 38644    16
+dim(raw_test) # 10286    16
 # Ajuste de las bases e inclusión de dos predictores imputados de la descripción de cada inmueble
 
 #--- Inspección de la base de datos train
@@ -631,17 +632,6 @@ htmlwidgets::saveWidget(parques, "views//parques.html")
 
 
 
-#---Plotear parques 
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = parques_geometria, col="green",
-              opacity = 0.8, popup = parques_geometria$name)%>% 
-    addCircles(lng = centroides_parques$x, 
-              lat = centroides_parques$y, 
-               col = "#800080", opacity = 0.5, radius = 1) 
-htmlwidgets::saveWidget(parques, "views//parques.html") 
-
 #---Plotear Parque Infantil 
 
 leaflet() %>%
@@ -664,63 +654,64 @@ leaflet() %>%
                                          col = "#800080", opacity = 0.5, radius = 1) 
                             htmlwidgets::saveWidget(parques, "views//hospital.html") 
                             
-                            #---Plotear Clinica 
+#---Plotear Clinica 
                             
-                            leaflet() %>%
-                              addTiles() %>%
-                              addPolygons(data = clinica_geometria, col="#1F497D",
-                                          opacity = 0.8, popup = clinica_geometria$name) %>% 
-                                            addCircles(lng = centroides_clinica$x, 
-                                                       lat = centroides_clinica$y, 
-                                                       col = "#800080", opacity = 0.5, radius = 1) 
-                                          htmlwidgets::saveWidget(parques, "views//clinica.html")
+leaflet() %>%
+addTiles() %>%
+ addPolygons(data = clinica_geometria, col="#1F497D",
+ opacity = 0.8, popup = clinica_geometria$name) %>% 
+addCircles(lng = centroides_clinica$x, 
+lat = centroides_clinica$y, 
+ col = "#800080", opacity = 0.5, radius = 1) 
+ htmlwidgets::saveWidget(parques, "views//clinica.html")
                                           
   #---Plotear estacion_bus 
                                           
-                                          leaflet() %>%
-                                            addTiles() %>%
-                                            addPolygons(data = estacion_bus_geometria, col="#555555",
-                                                        opacity = 0.8, popup = estacion_bus_geometria$name) %>% 
-                                                          addCircles(lng = centroides_estacion_bus$x, 
-                                                                     lat = centroides_estacion_bus$y, 
-                                                                     col = "#800080", opacity = 0.5, radius = 1) 
-                                                        htmlwidgets::saveWidget(parques, "views//estacion_bus.html")
+leaflet() %>%
+ addTiles() %>%
+ addPolygons(data = estacion_bus_geometria, col="#555555",
+ opacity = 0.8, popup = estacion_bus_geometria$name) %>% 
+ addCircles(lng = centroides_estacion_bus$x, 
+ lat = centroides_estacion_bus$y, 
+col = "#800080", opacity = 0.5, radius = 1) 
+htmlwidgets::saveWidget(parques, "views//estacion_bus.html")
                                                         
-                                                        #---Plotear policia 
+#---Plotear policia 
                                                         
-                                                        leaflet() %>%
-                                                          addTiles() %>%
-                                                          addPolygons(data = policia_geometria, col="#556B2F",
-                                                                      opacity = 0.8, popup = policia_geometria$name) %>% 
-                                                                        addCircles(lng = centroides_policia$x, 
-                                                                                   lat = centroides_policia$y, 
-                                                                                   col = "#800080", opacity = 0.5, radius = 1) 
-                                                                      htmlwidgets::saveWidget(parques, "views//policia.html") 
+leaflet() %>%
+ addTiles() %>%
+addPolygons(data = policia_geometria, col="#556B2F",
+opacity = 0.8, popup = policia_geometria$name) %>% 
+addCircles(lng = centroides_policia$x, 
+lat = centroides_policia$y, 
+col = "#800080", opacity = 0.5, radius = 1) 
+htmlwidgets::saveWidget(parques, "views//policia.html") 
                                                                       
                                                                       
-                                                                      #---Plotear colegio 
+#---Plotear colegio 
                                                                       
-                                                                      leaflet() %>%
-                                                                        addTiles() %>%
-                                                                        addPolygons(data = colegio_geometria, col="#FFBF00",
-                                                                                    opacity = 0.8, popup = colegio_geometria$name) %>% 
-                                                                                      addCircles(lng = centroides_colegio$x, 
-                                                                                                 lat = centroides_colegio$y, 
-                                                                                                 col = "#800080", opacity = 0.5, radius = 1) 
-                                                                                    htmlwidgets::saveWidget(parques, "views//colegio.html")       
+leaflet() %>%
+addTiles() %>%
+addPolygons(data = colegio_geometria, col="#FFBF00",
+opacity = 0.8, popup = colegio_geometria$name) %>% 
+addCircles(lng = centroides_colegio$x, 
+ lat = centroides_colegio$y, 
+col = "#800080", opacity = 0.5, radius = 1) 
+htmlwidgets::saveWidget(parques, "views//colegio.html")       
                                                                                     
                                                                                     
                                                                                     
-                                                                                    #---Plotear mercado 
+#---Plotear mercado 
                                                                                     
-                                                                                    leaflet() %>%
-                                                                                      addTiles() %>%
-                                                                                      addPolygons(data = mercado_geometria, col="#FFA500",
-                                                                                                  opacity = 0.8, popup = mercado_geometria$name) %>% 
-                                                                                                    addCircles(lng = centroides_mercado$x, 
-                                                                                                               lat = centroides_mercado$y, 
-                                                                                                               col = "#800080", opacity = 0.5, radius = 1) 
-                                                                                                  htmlwidgets::saveWidget(parques, "views//.html") 
+leaflet() %>%
+addTiles() %>%
+addPolygons(data = mercado_geometria, col="#FFA500",
+opacity = 0.8, popup = mercado_geometria$name) %>% 
+addCircles(lng = centroides_mercado$x, 
+lat = centroides_mercado$y, 
+col = "#800080", opacity = 0.5, radius = 1) 
+htmlwidgets::saveWidget(parques, "views//.html") 
+
  # Convertir data espacial 
                                                                                                   
 train_sf <- st_as_sf(raw_train, coords = c("lon", "lat"))
@@ -728,6 +719,9 @@ st_crs(train_sf) <- 4326
 test_sf <- st_as_sf(raw_test, coords = c("lon", "lat"))
 st_crs(test_sf) <- 4326
 
+
+dim(train_sf) # 38644    17
+dim(test_sf) # 10286    17
 
 centroides_parques_sf <- st_as_sf(centroides_parques, coords = c("x", "y"))
 centroides_parque_infantil_sf <- st_as_sf(centroides_parque_infantil, coords = c("x", "y"))
