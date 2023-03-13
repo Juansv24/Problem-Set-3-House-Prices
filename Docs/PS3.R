@@ -343,6 +343,37 @@ test <- test %>%
   )
 
 
+### Tras haber imputado los respectivos datos se insepeccionan y ajustan las variables de interés
+
+### Inspección y ajuste de la variable surface_total
+summary(train$surface_total)
+# Se eliminan los inmuebles con área menor a 20
+count(train,surface_total < 20)
+filtro10 <- train$surface_total > 20
+train <- train[filtro10, ]
+# Se inspeccionan los inmuebles de mayor área y se eliminan 6 outliers cuya área super los 3.000m2
+count(train,surface_total > 3000)
+filtro11 <- train$surface_total < 3000
+train <- train[filtro11, ]
+
+pl2 <- ggplot(train, aes(x = property_type, y = surface_total)) +
+  geom_boxplot(fill = "darkblue", alpha = 0.2) +
+  labs(x= "Tipo de propiedad", y = "Área") +
+  theme_bw()
+ggplotly(pl2)
+
+### Inspección de la variable price
+summary(train$price)
+
+pl3 <- ggplot(train, aes(x = property_type, y = price)) +
+  geom_boxplot(fill = "darkblue", alpha = 0.2) +
+  labs(x= "Tipo de propiedad", y = "Precio (log-scale)") +
+  scale_y_log10(labels = scales::dollar) +
+  theme_bw()
+ggplotly(pl3)
+
+# Calculamos valor del metro cuadrado en el arriendo
+train$price_mt2 <- round(train$price/train$surface_total, 0)
 
 
 
