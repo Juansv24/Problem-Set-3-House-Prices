@@ -811,7 +811,68 @@ tab_train_missings_vf <- apply(db_chapinero_train, 2, function(x) sum(is.na(x)))
 tab_train_missings_vf <- table(tab_train_missings_vf)
 tab_train_missings_vf
 
+#--- Distancias Chapinero test
+db_chapinero_test <- st_intersection(x=test_sf , y=chapinero)
+
+leaflet() %>%
+  addTiles() %>%
+  addPolygons(data=chapinero) %>%
+  addCircles(data=db_chapinero_test, col = "red")
+
+
+#----Distancias parques 
+dist_matrix_parques_test <- st_distance(x=db_chapinero_test, y=centroides_parques_sf)
+dist_min_parques_test <- apply(dist_matrix_parques_test, 1 ,min)
+db_chapinero_test$distancia_parque <- dist_min_parques_test
+
+posicion <- apply(dist_matrix_parques_test, 1, function(x) which(min(x)==x))
+area <- st_area(parques_geometria)
+db_chapinero_test$area__parque <- area[posicion]
+db_chapinero_test$area__parque <-as.numeric(db_chapinero_test$area__parque)
+
+#----Distancias parque_infantil 
+dist_matrix_parque_infantil_test <- st_distance(x=db_chapinero_test, y=centroides_parque_infantil_sf)
+dist_min_parque_infantil_test <- apply(dist_matrix_parque_infantil_test, 1 ,min)
+db_chapinero_test$distancia_parque_infatil <- dist_min_parque_infantil_test
+
+
+#----Distancias Hospital
+dist_matrix_hospital_test <- st_distance(x=db_chapinero_test, y=centroides_hospital_sf)
+dist_min_hospital_test <- apply(dist_matrix_hospital_test, 1 ,min)
+db_chapinero_test$distancia_hospital <- dist_min_hospital_test
+
+
+#----Distancias clinica
+dist_matrix_clinica_test <- st_distance(x=db_chapinero_test, y=centroides_clinica_sf)
+dist_min_clinica_test <- apply(dist_matrix_clinica_test, 1 ,min)
+db_chapinero_test$distancia_clinica <- dist_min_clinica_test
+
+#----Distancias estacion_bus
+dist_matrix_estacion_bus_test <- st_distance(x=db_chapinero_test, y=centroides_estacion_bus_sf)
+dist_min_estacion_bus_test <- apply(dist_matrix_estacion_bus_test, 1 ,min)
+db_chapinero_test$distancia_estacion_bus <- dist_min_estacion_bus_test
+
+#----Distancias policia
+dist_matrix_policia_test <- st_distance(x=db_chapinero_test, y=centroides_policia_sf)
+dist_min_policia_test <- apply(dist_matrix_policia_test, 1 ,min)
+db_chapinero_test$distancia_policia <- dist_min_policia_test
+
+#----Distancias colegio
+dist_matrix_colegio_test <- st_distance(x=db_chapinero_test, y=centroides_colegio_sf)
+dist_min_colegio_test <- apply(dist_matrix_colegio_test, 1 ,min)
+db_chapinero_test$distancia_colegio <- dist_min_colegio_test
+
+#----Distancias mercado
+dist_matrix_mercado_test <- st_distance(x=db_chapinero_test, y=centroides_mercado_sf)
+dist_min_mercado_test <- apply(dist_matrix_mercado_test, 1 ,min)
+db_chapinero_test$distancia_mercado <- dist_min_mercado_test
+
+
+tab_test_missings_vf <- apply(db_chapinero_test, 2, function(x) sum(is.na(x)))
+tab_test_missings_vf <- table(tab_test_missings_vf)
+tab_test_missings_vf
 
 options(scipen = 999)
 write.csv(db_chapinero_train, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/train_final.csv")
-write.csv(test, file = "data_ignore/test_final.csv")
+write.csv(db_chapinero_test, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/test_final.csv")
+
