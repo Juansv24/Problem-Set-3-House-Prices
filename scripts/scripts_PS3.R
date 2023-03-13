@@ -494,22 +494,6 @@ leaflet() %>%
   addPolygons(data = parques_geometria, col="green",
               opacity = 0.8, popup = parques_geometria$name)
 
-#---Parque Infantil---#
-parque_infantil_sf <- osmdata_sf(parque_infantil)
-
-#--- Extraer geometria
-parque_infantil_geometria <- parque_infantil_sf$osm_polygons %>% 
-  select(osm_id, name)
-
-parque_infantil_geometria
-
-#---Plotear Parque Infantil 
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = parque_infantil_geometria, col="pink",
-              opacity = 0.8, popup = parque_infantil_geometria$name)
-
 #---Hospital---#
 hospital_sf <- osmdata_sf(hospital)
 
@@ -526,21 +510,6 @@ leaflet() %>%
   addPolygons(data = hospital_geometria, col="#ADD8E6",
               opacity = 0.8, popup = hospital_geometria$name)
 
-#---Clinica---#
-clinica_sf <- osmdata_sf(clinica)
-
-#--- Extraer geometria
-clinica_geometria <- clinica_sf$osm_polygons %>% 
-  select(osm_id, name)
-
-clinica_geometria
-
-#---Plotear Clinica 
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = clinica_geometria, col="#1F497D",
-              opacity = 0.8, popup = clinica_geometria$name)
 
 #---estacion_bus---#
 estacion_bus_sf <- osmdata_sf(estacion_bus)
@@ -610,9 +579,7 @@ leaflet() %>%
 #---Centroides
 
 centroides_parques <- gCentroid(as(parques_geometria$geometry, "Spatial"), byid = T)
-centroides_parque_infantil <- gCentroid(as(parque_infantil_geometria$geometry, "Spatial"), byid = T)
 centroides_hospital <- gCentroid(as(hospital_geometria$geometry, "Spatial"), byid = T)
-centroides_clinica <- gCentroid(as(clinica_geometria$geometry, "Spatial"), byid = T)
 centroides_estacion_bus <- gCentroid(as(estacion_bus_geometria$geometry, "Spatial"), byid = T)
 centroides_policia <- gCentroid(as(policia_geometria$geometry, "Spatial"), byid = T)
 centroides_colegio <- gCentroid(as(colegio_geometria$geometry, "Spatial"), byid = T)
@@ -630,18 +597,6 @@ leaflet() %>%
              col = "#800080", opacity = 0.5, radius = 1) 
 htmlwidgets::saveWidget(parques, "views//parques.html")  
 
-
-
-#---Plotear Parque Infantil 
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = parque_infantil_geometria, col="pink",
-              opacity = 0.8, popup = parque_infantil_geometria$name) %>% 
-                addCircles(lng = centroides_parque_infantil$x, 
-                           lat = centroides_parque_infantil$y, 
-                           col = "#800080", opacity = 0.5, radius = 1) 
-              htmlwidgets::saveWidget(parques, "views//parque_infantil.html") 
               
  #---Plotear Hospital 
               
@@ -654,17 +609,6 @@ leaflet() %>%
                                          col = "#800080", opacity = 0.5, radius = 1) 
                             htmlwidgets::saveWidget(parques, "views//hospital.html") 
                             
-#---Plotear Clinica 
-                            
-leaflet() %>%
-addTiles() %>%
- addPolygons(data = clinica_geometria, col="#1F497D",
- opacity = 0.8, popup = clinica_geometria$name) %>% 
-addCircles(lng = centroides_clinica$x, 
-lat = centroides_clinica$y, 
- col = "#800080", opacity = 0.5, radius = 1) 
- htmlwidgets::saveWidget(parques, "views//clinica.html")
-                                          
   #---Plotear estacion_bus 
                                           
 leaflet() %>%
@@ -700,7 +644,6 @@ col = "#800080", opacity = 0.5, radius = 1)
 htmlwidgets::saveWidget(parques, "views//colegio.html")       
                                                                                     
                                                                                     
-                                                                                    
 #---Plotear mercado 
                                                                                     
 leaflet() %>%
@@ -719,91 +662,80 @@ st_crs(train_sf) <- 4326
 test_sf <- st_as_sf(raw_test, coords = c("lon", "lat"))
 st_crs(test_sf) <- 4326
 
+options(scipen = 999)
+write.csv(train_sf, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/train_imputada.csv")
+write.csv(test_sf, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/test_imputada.csv")
+
 
 dim(train_sf) # 38644    17
 dim(test_sf) # 10286    17
 
 centroides_parques_sf <- st_as_sf(centroides_parques, coords = c("x", "y"))
-centroides_parque_infantil_sf <- st_as_sf(centroides_parque_infantil, coords = c("x", "y"))
 centroides_hospital_sf <- st_as_sf(centroides_hospital, coords = c("x", "y"))
-centroides_clinica_sf <- st_as_sf(centroides_clinica, coords = c("x", "y"))
 centroides_estacion_bus_sf <- st_as_sf(centroides_estacion_bus, coords = c("x", "y"))
 centroides_policia_sf <- st_as_sf(centroides_policia, coords = c("x", "y"))
 centroides_colegio_sf <- st_as_sf(centroides_colegio, coords = c("x", "y"))
 centroides_mercado_sf <- st_as_sf(centroides_mercado, coords = c("x", "y"))
 
-
-
-#Restringir
-chapinero<-getbb(place_name = "UPZ Chapinero, Bogota",
-                 featuretype = "boundary:administrative",
-                 format_out = "sf_polygon")  %>% .$multipolygon
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data=chapinero)
-
-
-#--- Distancias Chapinero train
-db_chapinero_train <- st_intersection(x=train_sf , y=chapinero)
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data=chapinero) %>%
-  addCircles(data=db_chapinero_train, col = "red")
-
-
+#Aqui
 #----Distancias parques 
-dist_matrix_parques_train <- st_distance(x=db_chapinero_train, y=centroides_parques_sf)
+dist_matrix_parques_train <- st_distance(x=train_sf, y=centroides_parques_sf)
 dist_min_parques_train <- apply(dist_matrix_parques_train, 1 ,min)
-db_chapinero_train$distancia_parque <- dist_min_parques_train
+train_sf$distancia_parque <- dist_min_parques_train
 
 posicion <- apply(dist_matrix_parques_train, 1, function(x) which(min(x)==x))
 area <- st_area(parques_geometria)
-db_chapinero_train$area__parque <- area[posicion]
-db_chapinero_train$area__parque <-as.numeric(db_chapinero_train$area__parque)
+train_sf$area__parque <- area[posicion]
+train_sf$area__parque <-as.numeric(train_sf$area__parque)
 
 #----Distancias parque_infantil 
-dist_matrix_parque_infantil_train <- st_distance(x=db_chapinero_train, y=centroides_parque_infantil_sf)
+dist_matrix_parque_infantil_train <- st_distance(x=train_sf, y=centroides_parque_infantil_sf)
 dist_min_parque_infantil_train <- apply(dist_matrix_parque_infantil_train, 1 ,min)
-db_chapinero_train$distancia_parque_infatil <- dist_min_parque_infantil_train
+train_sf$distancia_parque_infatil <- dist_min_parque_infantil_train
 
 
 #----Distancias Hospital
-dist_matrix_hospital_train <- st_distance(x=db_chapinero_train, y=centroides_hospital_sf)
+dist_matrix_hospital_train <- st_distance(x=train_sf, y=centroides_hospital_sf)
 dist_min_hospital_train <- apply(dist_matrix_hospital_train, 1 ,min)
-db_chapinero_train$distancia_hospital <- dist_min_hospital_train
+train_sf$distancia_hospital <- dist_min_hospital_train
 
 
 #----Distancias clinica
-dist_matrix_clinica_train <- st_distance(x=db_chapinero_train, y=centroides_clinica_sf)
+dist_matrix_clinica_train <- st_distance(x=train_sf, y=centroides_clinica_sf)
 dist_min_clinica_train <- apply(dist_matrix_clinica_train, 1 ,min)
-db_chapinero_train$distancia_clinica <- dist_min_clinica_train
+train_sf$distancia_clinica <- dist_min_clinica_train
 
 #----Distancias estacion_bus
-dist_matrix_estacion_bus_train <- st_distance(x=db_chapinero_train, y=centroides_estacion_bus_sf)
+dist_matrix_estacion_bus_train <- st_distance(x=train_sf, y=centroides_estacion_bus_sf)
 dist_min_estacion_bus_train <- apply(dist_matrix_estacion_bus_train, 1 ,min)
-db_chapinero_train$distancia_estacion_bus <- dist_min_estacion_bus_train
+train_sf$distancia_estacion_bus <- dist_min_estacion_bus_train
 
 #----Distancias policia
-dist_matrix_policia_train <- st_distance(x=db_chapinero_train, y=centroides_policia_sf)
+dist_matrix_policia_train <- st_distance(x=train_sf, y=centroides_policia_sf)
 dist_min_policia_train <- apply(dist_matrix_policia_train, 1 ,min)
-db_chapinero_train$distancia_policia <- dist_min_policia_train
+train_sf$distancia_policia <- dist_min_policia_train
 
 #----Distancias colegio
-dist_matrix_colegio_train <- st_distance(x=db_chapinero_train, y=centroides_colegio_sf)
+dist_matrix_colegio_train <- st_distance(x=train_sf, y=centroides_colegio_sf)
 dist_min_colegio_train <- apply(dist_matrix_colegio_train, 1 ,min)
-db_chapinero_train$distancia_colegio <- dist_min_colegio_train
+train_sf$distancia_colegio <- dist_min_colegio_train
 
 #----Distancias mercado
-dist_matrix_mercado_train <- st_distance(x=db_chapinero_train, y=centroides_mercado_sf)
+dist_matrix_mercado_train <- st_distance(x=train_sf, y=centroides_mercado_sf)
 dist_min_mercado_train <- apply(dist_matrix_mercado_train, 1 ,min)
-db_chapinero_train$distancia_mercado <- dist_min_mercado_train
+train_sf$distancia_mercado <- dist_min_mercado_train
 
 
-tab_train_missings_vf <- apply(db_chapinero_train, 2, function(x) sum(is.na(x)))
+tab_train_missings_vf <- apply(train_sf, 2, function(x) sum(is.na(x)))
 tab_train_missings_vf <- table(tab_train_missings_vf)
 tab_train_missings_vf
+
+#Aqui
+
+
+
+
+
 
 #--- Distancias Chapinero test
 db_chapinero_test <- st_intersection(x=test_sf , y=chapinero)
