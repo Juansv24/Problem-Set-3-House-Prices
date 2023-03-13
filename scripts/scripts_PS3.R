@@ -688,22 +688,11 @@ area <- st_area(parques_geometria)
 train_sf$area__parque <- area[posicion]
 train_sf$area__parque <-as.numeric(train_sf$area__parque)
 
-#----Distancias parque_infantil 
-dist_matrix_parque_infantil_train <- st_distance(x=train_sf, y=centroides_parque_infantil_sf)
-dist_min_parque_infantil_train <- apply(dist_matrix_parque_infantil_train, 1 ,min)
-train_sf$distancia_parque_infatil <- dist_min_parque_infantil_train
-
 
 #----Distancias Hospital
 dist_matrix_hospital_train <- st_distance(x=train_sf, y=centroides_hospital_sf)
 dist_min_hospital_train <- apply(dist_matrix_hospital_train, 1 ,min)
 train_sf$distancia_hospital <- dist_min_hospital_train
-
-
-#----Distancias clinica
-dist_matrix_clinica_train <- st_distance(x=train_sf, y=centroides_clinica_sf)
-dist_min_clinica_train <- apply(dist_matrix_clinica_train, 1 ,min)
-train_sf$distancia_clinica <- dist_min_clinica_train
 
 #----Distancias estacion_bus
 dist_matrix_estacion_bus_train <- st_distance(x=train_sf, y=centroides_estacion_bus_sf)
@@ -730,75 +719,51 @@ tab_train_missings_vf <- apply(train_sf, 2, function(x) sum(is.na(x)))
 tab_train_missings_vf <- table(tab_train_missings_vf)
 tab_train_missings_vf
 
-#Aqui
-
-
-
-
-
-
-#--- Distancias Chapinero test
-db_chapinero_test <- st_intersection(x=test_sf , y=chapinero)
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data=chapinero) %>%
-  addCircles(data=db_chapinero_test, col = "red")
+dim(train_sf) # 38644    24
 
 
 #----Distancias parques 
-dist_matrix_parques_test <- st_distance(x=db_chapinero_test, y=centroides_parques_sf)
+dist_matrix_parques_test <- st_distance(x=test_sf, y=centroides_parques_sf)
 dist_min_parques_test <- apply(dist_matrix_parques_test, 1 ,min)
-db_chapinero_test$distancia_parque <- dist_min_parques_test
+test_sf$distancia_parque <- dist_min_parques_test
 
 posicion <- apply(dist_matrix_parques_test, 1, function(x) which(min(x)==x))
 area <- st_area(parques_geometria)
-db_chapinero_test$area__parque <- area[posicion]
-db_chapinero_test$area__parque <-as.numeric(db_chapinero_test$area__parque)
-
-#----Distancias parque_infantil 
-dist_matrix_parque_infantil_test <- st_distance(x=db_chapinero_test, y=centroides_parque_infantil_sf)
-dist_min_parque_infantil_test <- apply(dist_matrix_parque_infantil_test, 1 ,min)
-db_chapinero_test$distancia_parque_infatil <- dist_min_parque_infantil_test
-
+test_sf$area__parque <- area[posicion]
+test_sf$area__parque <-as.numeric(test_sf$area__parque)
 
 #----Distancias Hospital
-dist_matrix_hospital_test <- st_distance(x=db_chapinero_test, y=centroides_hospital_sf)
+dist_matrix_hospital_test <- st_distance(x=test_sf, y=centroides_hospital_sf)
 dist_min_hospital_test <- apply(dist_matrix_hospital_test, 1 ,min)
-db_chapinero_test$distancia_hospital <- dist_min_hospital_test
-
-
-#----Distancias clinica
-dist_matrix_clinica_test <- st_distance(x=db_chapinero_test, y=centroides_clinica_sf)
-dist_min_clinica_test <- apply(dist_matrix_clinica_test, 1 ,min)
-db_chapinero_test$distancia_clinica <- dist_min_clinica_test
+test_sf$distancia_hospital <- dist_min_hospital_test
 
 #----Distancias estacion_bus
-dist_matrix_estacion_bus_test <- st_distance(x=db_chapinero_test, y=centroides_estacion_bus_sf)
+dist_matrix_estacion_bus_test <- st_distance(x=test_sf, y=centroides_estacion_bus_sf)
 dist_min_estacion_bus_test <- apply(dist_matrix_estacion_bus_test, 1 ,min)
-db_chapinero_test$distancia_estacion_bus <- dist_min_estacion_bus_test
+test_sf$distancia_estacion_bus <- dist_min_estacion_bus_test
 
 #----Distancias policia
-dist_matrix_policia_test <- st_distance(x=db_chapinero_test, y=centroides_policia_sf)
+dist_matrix_policia_test <- st_distance(x=test_sf, y=centroides_policia_sf)
 dist_min_policia_test <- apply(dist_matrix_policia_test, 1 ,min)
-db_chapinero_test$distancia_policia <- dist_min_policia_test
+test_sf$distancia_policia <- dist_min_policia_test
 
 #----Distancias colegio
-dist_matrix_colegio_test <- st_distance(x=db_chapinero_test, y=centroides_colegio_sf)
+dist_matrix_colegio_test <- st_distance(x=test_sf, y=centroides_colegio_sf)
 dist_min_colegio_test <- apply(dist_matrix_colegio_test, 1 ,min)
-db_chapinero_test$distancia_colegio <- dist_min_colegio_test
+test_sf$distancia_colegio <- dist_min_colegio_test
 
 #----Distancias mercado
-dist_matrix_mercado_test <- st_distance(x=db_chapinero_test, y=centroides_mercado_sf)
+dist_matrix_mercado_test <- st_distance(x=test_sf, y=centroides_mercado_sf)
 dist_min_mercado_test <- apply(dist_matrix_mercado_test, 1 ,min)
-db_chapinero_test$distancia_mercado <- dist_min_mercado_test
+test_sf$distancia_mercado <- dist_min_mercado_test
 
-
-tab_test_missings_vf <- apply(db_chapinero_test, 2, function(x) sum(is.na(x)))
+tab_test_missings_vf <- apply(test_sf, 2, function(x) sum(is.na(x)))
 tab_test_missings_vf <- table(tab_test_missings_vf)
 tab_test_missings_vf
 
+dim(test_sf) # 10286    24
+
 options(scipen = 999)
-write.csv(db_chapinero_train, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/train_final.csv")
-write.csv(db_chapinero_test, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/test_final.csv")
+write.csv(train_sf, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/train_final.csv")
+write.csv(test_sf, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/test_final.csv")
 
