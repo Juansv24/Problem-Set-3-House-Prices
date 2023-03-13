@@ -767,3 +767,9 @@ options(scipen = 999)
 write.csv(train_sf, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/train_final.csv")
 write.csv(test_sf, file = "C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work/test_final.csv")
 
+
+setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/work")
+
+## Guardar data
+write.table(train_sf, "data_train_final.txt", sep = "\t", quote = F, row.names = F)
+write.table(test_sf, "data_test_final.txt", sep = "\t", quote = F, row.names = F)
