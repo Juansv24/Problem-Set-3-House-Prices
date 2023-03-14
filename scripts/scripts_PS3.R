@@ -773,3 +773,4 @@ setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/da
 ## Guardar data
 write.table(train_sf, "data_train_final.txt", sep = "\t", quote = F, row.names = F)
 write.table(test_sf, "data_test_final.txt", sep = "\t", quote = F, row.names = F)
+
