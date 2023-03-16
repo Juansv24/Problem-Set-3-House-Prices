@@ -16,14 +16,17 @@
 
 ### Parte 1: Preparación de las bases de datos y estadísticas descriptivas
 
-#--- Limpieza del entorno
+#--- Limpieza del entorno de trabajo
 rm(list = ls())
 
 #--- Cargar los paquetes necesarios
 library(pacman)
-p_load(tidyverse, ggplot2, openxlsx, scales, skimr, stringi, SnowballC, stringr,
-       rio, plotly, leaflet, rgeos, tmaptools, sf, stargazer, osmdata,
-       ggExtra, gridExtra, tidyr, psych, readr)
+
+p_load(tidyverse,ggplot2,sf,tmaptools,leaflet,tmaptools,osmdata, leaflet, 
+       openxlsx,scales,skimr,stringi,SnowballC,stringr,rio, plotly, rgeos, 
+       stargazer,ggExtra, gridExtra, tidyr, psych, readr)
+
+
 
 ### Cargar funciones
 
@@ -35,30 +38,47 @@ proper = function(x) paste0(toupper(substr(x, 1, 1)),
 
 #--- Establecer el directorio de la carpeta de datos
 
-setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/raw")
+  setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/data/raw")
 
 #--- Importar base de datos : train y test
-raw_train <- read_csv("train.csv")
-raw_test <- read_csv("test.csv")
+  
+  raw_train <- read_csv("train.csv")
+  raw_test <- read_csv("test.csv")
 
-dim(raw_train) # 38644    16
-dim(raw_test) # 10286    16
-# Ajuste de las bases e inclusión de dos predictores imputados de la descripción de cada inmueble
+#--- Visualizar las dimensiones de cada matriz de datos [train-test]
+  
+  dim(raw_train)  # Filas=38644 x Columnas=16
+  dim(raw_test)   # Filas=10286 x Columnas=16
 
-#--- Inspección de la base de datos train
+################################################################################
+# Imputación e inclusión de  predictores imputados externos a los inmuebles
+################################################################################
+  
+  
+  summary(raw_train)
+  
+  # Tabulación
+  table(raw_train$rooms)
+  table(raw_train$bedrooms)
+  table(raw_train$rooms)
+  table(raw_train$property_type)  # Apartamento o Casa
+  table(raw_train$operation_type) # Solo venta 
+  
+#--- Inspección de la base de datos [train]
+  
 
 ### Expolorar missing value
-skim(raw_train)
 
-glimpse(raw_train)
+  skim(raw_train)
+  glimpse(raw_train)
 
 # Tabla de frecuencia de variables con missing value
 
-tab_train_missings <- apply(raw_train, 2, function(x) sum(is.na(x)))
-tab_train_missings <- table(tab_train_missings)
-tab_train_missings
+  tab_train_missings <- apply(raw_train, 2, function(x) sum(is.na(x)))
+  tab_train_missings <- table(tab_train_missings)
+  tab_train_missings
 
-#---Descripción base de datos: train
+#---Descripción base de datos: [train]
       # Hay 10 variables no tienen missing value
       #--- property_id - city - price - moth - year - bedrooms property_type -operation_type
       #--- lat -lon
@@ -79,18 +99,18 @@ tab_train_missings
       #--- surface_total -surface_covered
 
 
-#--- Inspección de la base de datos train
+#--- Inspección de la base de datos [test]
 
 ### Expolorar missing value
-skim(raw_test)
 
-glimpse(raw_test)
+  skim(raw_test)
+  glimpse(raw_test)
 
 # Tabla de frecuencia de variables con missing value
 
-tab_test_missings <- apply(raw_test, 2, function(x) sum(is.na(x)))
-tab_test_missings <- table(tab_test_missings)
-tab_test_missings
+  tab_test_missings <- apply(raw_test, 2, function(x) sum(is.na(x)))
+  tab_test_missings <- table(tab_test_missings)
+  tab_test_missings
 
 #---Descripción base de datos: test
 # Hay 9 variables no tienen missing value
@@ -121,23 +141,38 @@ tab_test_missings
 #-----------------------------------------------------------------------------
 
 
+################################################################################
+  
+  # 1.3 Completar informacion con expresiones regulares
+  
+  colnames(raw_train)[colnames(raw_train) == "title"] <- "titulo"
+  colnames(raw_test)[colnames(raw_test) == "title"] <- "titulo"  
 
-### "Missing values" en la variable price 
-filtro <- is.na(raw_train$price)
-sum(filtro) ## la variable price no tiene "missing values"
+  objetos <- c("raw_train", "raw_test")
+  for (obj in objetos) {
+    
+    
+################################################################################
 
-### Distribución del precio del inmueble 
-summary(raw_train$price) %>%
-  as.matrix() %>%
-  as.data.frame() %>%
-  mutate(V1 = scales::dollar(V1))
+#----"Missing values" en la variable price [train]
+  filtro_train <- is.na(raw_train$price)
+  sum(filtro_train) ## la variable price no tiene "missing values" en la data train
 
-p1 <- ggplot(raw_train, aes(x = price)) +
-  geom_histogram(fill = "darkblue", alpha = 0.4) +
-  labs(x = "Precio (log-scale)", y = "Cantidad") +
-  scale_x_log10(labels = scales::dollar) +
-  theme_bw()
-ggplotly(p1)
+  filtro_test <- is.na(raw_test$price)
+  sum(filtro_test) ## la variable price  tiene 10286 "missing values"
+  
+#---Distribución del precio del inmueble 
+  summary(raw_train$price) %>%
+    as.matrix() %>%
+    as.data.frame() %>%
+    mutate(V1 = scales::dollar(V1))
+
+  p1 <- ggplot(raw_train, aes(x = price)) +
+    geom_histogram(fill = "darkblue", alpha = 0.4) +
+    labs(x = "Precio (log-scale)", y = "Cantidad") +
+    scale_x_log10(labels = scales::dollar) +
+    theme_bw()
+  ggplotly(p1)
  
 
 ### "Missing values" en la variable surface_total en train y test
