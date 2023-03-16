@@ -140,20 +140,6 @@ proper = function(x) paste0(toupper(substr(x, 1, 1)),
 
 #-----------------------------------------------------------------------------
 
-
-################################################################################
-  
-  # 1.3 Completar informacion con expresiones regulares
-  
-  colnames(raw_train)[colnames(raw_train) == "title"] <- "titulo"
-  colnames(raw_test)[colnames(raw_test) == "title"] <- "titulo"  
-
-  objetos <- c("raw_train", "raw_test")
-  for (obj in objetos) {
-    
-    
-################################################################################
-
 #----"Missing values" en la variable price [train]
   filtro_train <- is.na(raw_train$price)
   sum(filtro_train) ## la variable price no tiene "missing values" en la data train
@@ -175,6 +161,15 @@ proper = function(x) paste0(toupper(substr(x, 1, 1)),
   ggplotly(p1)
  
 
+  
+  ggplot(raw_train, aes(x = price, fill = property_type)) +
+    geom_density(alpha = 0.5) +
+    labs(x = "Precio", y = "Densidad") +
+    theme_minimal()
+
+
+  
+  
 ### "Missing values" en la variable surface_total en train y test
 colSums(is.na(raw_train)) # surface_total tiene 30790 NA
 colSums(is.na(raw_test))  # surface_total tiene 8422 NA
@@ -809,3 +804,51 @@ setwd("C:/Users/andre/OneDrive/Github/Repositorios/Problem-Set-3-House-Prices/da
 write.table(train_sf, "data_train_final.txt", sep = "\t", quote = F, row.names = F)
 write.table(test_sf, "data_test_final.txt", sep = "\t", quote = F, row.names = F)
 
+# Estadisticas
+names(train_sf)
+#table(train_sf$)
+table(train_sf$price)
+glimpse(train_sf$price)
+
+table(train_sf$rooms)
+glimpse(train_sf$rooms)
+
+table(train_sf$bedrooms)
+glimpse(train_sf$bedrooms)
+
+table(train_sf$bathrooms)
+glimpse(train_sf$bathrooms)
+
+table(train_sf$property_type)
+glimpse(train_sf$property_type)
+
+table(train_sf$property_type)
+glimpse(train_sf$property_type)
+
+table(train_sf$garage)
+glimpse(train_sf$garage)
+
+model_data_train <- train_sf %>% 
+  select("price","rooms","bedrooms","bathrooms","property_type",
+         "balcony","garage","distancia_parque","area__parque",
+         "distancia_hospital", "distancia_estacion_bus",
+         "distancia_policia","distancia_colegio", "distancia_mercado") %>%
+  mutate(
+    property_type = as.character(property_type),
+    rooms = as.numeric(rooms),
+    bedrooms = as.numeric(bedrooms),
+    bathrooms = as.numeric(bathrooms),
+    balcony = as.character(balcony),
+    garage = as.character(garage)
+  ) %>% 
+  na.omit()
+
+descriptivas <- model_data_train[c("price","rooms","bedrooms","bathrooms","property_type",
+                                   "balcony","garage","distancia_parque","area__parque",
+                                   "distancia_hospital", "distancia_estacion_bus",
+                                   "distancia_policia","distancia_colegio", "distancia_mercado")]
+
+descriptivas_all <- data.frame(sapply(descriptivas, function(x) 
+  c(mean = mean(x), sd = sd(x))))
+
+stargazer(descriptivas_all, type = "latex",summary.stat = c("mean", "sd"))
