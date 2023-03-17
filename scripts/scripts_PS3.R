@@ -877,3 +877,38 @@ d_distancia_colegio
 d_distancia_mercado<- model_data_train %>% summarise(media = mean(distancia_mercado), desviacion = sd(distancia_mercado))
 d_distancia_mercado
 
+#Test
+
+model_data_test <- test_sf %>% 
+  select("rooms","bedrooms","bathrooms","distancia_parque","area__parque",
+         "distancia_hospital", "distancia_estacion_bus",
+         "distancia_policia","distancia_colegio", "distancia_mercado") %>%
+  na.omit()
+
+as.numeric(model_data_test)
+descriptivas <- model_data_test[c("rooms","bedrooms","bathrooms","distancia_parque","area__parque",
+                                  "distancia_hospital", "distancia_estacion_bus",
+                                  "distancia_policia","distancia_colegio", "distancia_mercado")]
+descriptivas_all <- data.frame(sapply(descriptivas, function(x) 
+  c(mean = mean(x), sd = sd(x))))
+
+stargazer(descriptivas_all, type = "latex",summary.stat = c("mean", "sd"))
+
+summary(model_data_test)
+
+d_price <- model_data_test %>% summarise(media = mean(price), desviacion = sd(price))
+d_price
+d_rooms <- model_data_test %>% summarise(media = mean(rooms), desviacion = sd(rooms))
+d_rooms
+d_bedrooms <- model_data_test %>% summarise(media = mean(bedrooms), desviacion = sd(bedrooms))
+d_bedrooms
+d_bathrooms <- model_data_test %>% summarise(media = mean(bathrooms), desviacion = sd(bathrooms))
+d_bathrooms
+d_property_type <- model_data_test %>% summarise(media = mean(property_type), desviacion = sd(property_type))
+d_property_type
+d_balcony <- model_data_test %>% summarise(media = mean(balcony), desviacion = sd(balcony))
+d_balcony
+d_distancia_parque <- model_data_test %>% summarise(media = mean(distancia_parque), desviacion = sd(distancia_parque))
+d_distancia_parque
+d_area__parque <- model_data_test %>% summarise(media = mean(area__parque), desviacion = sd(area__parque))
+d_area__parque
