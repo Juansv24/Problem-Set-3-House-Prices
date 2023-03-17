@@ -829,26 +829,51 @@ table(train_sf$garage)
 glimpse(train_sf$garage)
 
 model_data_train <- train_sf %>% 
-  select("price","rooms","bedrooms","bathrooms","property_type",
-         "balcony","garage","distancia_parque","area__parque",
+  select("price","rooms","bedrooms","bathrooms","distancia_parque","area__parque",
          "distancia_hospital", "distancia_estacion_bus",
          "distancia_policia","distancia_colegio", "distancia_mercado") %>%
-  mutate(
-    property_type = as.character(property_type),
-    rooms = as.numeric(rooms),
-    bedrooms = as.numeric(bedrooms),
-    bathrooms = as.numeric(bathrooms),
-    balcony = as.character(balcony),
-    garage = as.character(garage)
-  ) %>% 
   na.omit()
 
-descriptivas <- model_data_train[c("price","rooms","bedrooms","bathrooms","property_type",
-                                   "balcony","garage","distancia_parque","area__parque",
+as.numeric(model_data_train)
+descriptivas <- model_data_train[c("price","rooms","bedrooms","bathrooms","distancia_parque","area__parque",
                                    "distancia_hospital", "distancia_estacion_bus",
                                    "distancia_policia","distancia_colegio", "distancia_mercado")]
-
 descriptivas_all <- data.frame(sapply(descriptivas, function(x) 
   c(mean = mean(x), sd = sd(x))))
 
 stargazer(descriptivas_all, type = "latex",summary.stat = c("mean", "sd"))
+
+summary(model_data_train)
+
+d_price <- model_data_train %>% summarise(media = mean(price), desviacion = sd(price))
+d_price
+d_rooms <- model_data_train %>% summarise(media = mean(rooms), desviacion = sd(rooms))
+d_rooms
+d_bedrooms <- model_data_train %>% summarise(media = mean(bedrooms), desviacion = sd(bedrooms))
+d_bedrooms
+d_bathrooms <- model_data_train %>% summarise(media = mean(bathrooms), desviacion = sd(bathrooms))
+d_bathrooms
+d_property_type <- model_data_train %>% summarise(media = mean(property_type), desviacion = sd(property_type))
+d_property_type
+d_balcony <- model_data_train %>% summarise(media = mean(balcony), desviacion = sd(balcony))
+d_balcony
+d_distancia_parque <- model_data_train %>% summarise(media = mean(distancia_parque), desviacion = sd(distancia_parque))
+d_distancia_parque
+d_area__parque <- model_data_train %>% summarise(media = mean(area__parque), desviacion = sd(area__parque))
+d_area__parque
+
+d_distancia_hospital<- model_data_train %>% summarise(media = mean(distancia_hospital), desviacion = sd(distancia_hospital))
+d_distancia_hospital
+
+d_distancia_estacion_bus<- model_data_train %>% summarise(media = mean(distancia_estacion_bus), desviacion = sd(distancia_estacion_bus))
+d_distancia_estacion_bus
+
+d_distancia_policia<- model_data_train %>% summarise(media = mean(distancia_policia), desviacion = sd(distancia_policia))
+d_distancia_policia
+
+d_distancia_colegio<- model_data_train %>% summarise(media = mean(distancia_colegio), desviacion = sd(distancia_colegio))
+d_distancia_colegio
+
+d_distancia_mercado<- model_data_train %>% summarise(media = mean(distancia_mercado), desviacion = sd(distancia_mercado))
+d_distancia_mercado
+
